@@ -5,7 +5,7 @@ namespace StreamEngine
 {
 	class Texture2D;
 
-	class RenderComponent : BaseComponent
+	class RenderComponent : public BaseComponent
 	{
 	public:
 		RenderComponent(std::weak_ptr<GameObject> pOwningGameObject);

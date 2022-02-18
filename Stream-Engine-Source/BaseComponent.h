@@ -8,8 +8,8 @@ namespace StreamEngine
 	class BaseComponent
 	{
 	public:
-		BaseComponent(bool isVisual, std::weak_ptr<GameObject> pOwningGameObject);
-		virtual ~BaseComponent();
+		explicit BaseComponent(std::weak_ptr<GameObject> pOwningGameObject);
+		virtual ~BaseComponent() = default;
 
 #pragma warning (push)
 #pragma warning (disable:4100)
@@ -18,17 +18,12 @@ namespace StreamEngine
 		virtual void LateUpdate(float deltaTime) {};
 #pragma warning (pop)
 		virtual void Render() const {};
-
-		bool IsVisual() const;
 		
 		BaseComponent(const BaseComponent&) = delete;
 		BaseComponent(BaseComponent&&) noexcept = delete;
 		BaseComponent& operator=(const BaseComponent&) = delete;
 		BaseComponent& operator=(BaseComponent&&) noexcept = delete;
-	private:
-		bool m_IsVisual;
 	protected:
-		//GameObject* m_pOwningGameObject;
 		std::weak_ptr<GameObject> m_pOwningGameObject;
 	};
 }

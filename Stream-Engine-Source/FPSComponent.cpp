@@ -2,7 +2,7 @@
 #include "FPSComponent.h"
 
 StreamEngine::FPSComponent::FPSComponent(std::weak_ptr<GameObject> pOwningGameObject)
-	:BaseComponent(false, pOwningGameObject),
+	:BaseComponent(pOwningGameObject),
 	m_pText(std::make_shared<std::string>("0")),
 	m_AccumulatedTime(),
 	m_UpdateTimeSec(1)

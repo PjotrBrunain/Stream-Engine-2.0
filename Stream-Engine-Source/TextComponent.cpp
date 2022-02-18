@@ -4,26 +4,27 @@
 #include <SDL_ttf.h>
 #include "Font.h"
 #include "GameObject.h"
+#include "RenderComponent.h"
 #include "Texture2D.h"
 
 #include "ResourceManager.h"
 #include "Renderer.h"
 
-StreamEngine::TextComponent::TextComponent(std::weak_ptr<GameObject> pOwningGameObject)
-	:BaseComponent(true, pOwningGameObject),
+StreamEngine::TextComponent::TextComponent(std::weak_ptr<GameObject> pOwningGameObject, std::shared_ptr<RenderComponent> renderComponent)
+	:BaseComponent(pOwningGameObject),
 	m_pFont(nullptr),
-	m_pTexture(nullptr),
+	m_pRenderComponent(renderComponent),
 	m_Color{ 255,255,255,255 },
 	m_pText{ std::make_shared<std::string>("SampleText") },
 	m_Size{ 20 },
-	m_UpdateText(false),
-	m_FontPath()
+	m_FontPath(),
+	m_UpdateText(false)
 {
 	
 }
 
-StreamEngine::TextComponent::TextComponent(const std::string& fontPath, std::weak_ptr<GameObject> pOwningGameObject)
-	:TextComponent(pOwningGameObject)
+StreamEngine::TextComponent::TextComponent(const std::string& fontPath, std::weak_ptr<GameObject> pOwningGameObject, std::shared_ptr<RenderComponent> renderComponent)
+	:TextComponent(pOwningGameObject, renderComponent)
 {
 	m_FontPath = fontPath;
 	m_pFont = ResourceManager::GetInstance().LoadFont(fontPath, m_Size);
@@ -32,15 +33,6 @@ StreamEngine::TextComponent::TextComponent(const std::string& fontPath, std::wea
 		throw std::exception{ "Font failed to initialize" };
 	}
 	CreateTextTexture();
-}
-
-StreamEngine::TextComponent::~TextComponent()
-{
-}
-
-void StreamEngine::TextComponent::Render() const
-{
-	Renderer::GetInstance().RenderTexture(*m_pTexture.get(), m_pOwningGameObject.lock()->GetTransform().GetPosition().x, m_pOwningGameObject.lock()->GetTransform().GetPosition().y);
 }
 
 void StreamEngine::TextComponent::Update(float deltaTime)
@@ -67,7 +59,6 @@ void StreamEngine::TextComponent::LinkText(const std::shared_ptr<std::string> pT
 void StreamEngine::TextComponent::SetSize(const int& size)
 {
 	m_Size = size;
-	//CreateTextTexture();
 	m_pFont = ResourceManager::GetInstance().LoadFont(m_FontPath, m_Size);
 	CreateTextTexture();
 }
@@ -83,7 +74,7 @@ void StreamEngine::TextComponent::SetDoUpdate(bool updateText)
 	m_UpdateText = updateText;
 }
 
-void StreamEngine::TextComponent::CreateTextTexture()
+void StreamEngine::TextComponent::CreateTextTexture() const
 {
 	SDL_Surface* pSurface = TTF_RenderText_Blended(m_pFont->GetFont(), m_pText->c_str(), m_Color);
 	if (pSurface == nullptr)
@@ -98,5 +89,5 @@ void StreamEngine::TextComponent::CreateTextTexture()
 	}
 
 	SDL_FreeSurface(pSurface);
-	m_pTexture = std::make_shared<Texture2D>(pTexture);
+	m_pRenderComponent->SetTexture(std::make_shared<Texture2D>(pTexture));
 }

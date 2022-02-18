@@ -2,7 +2,7 @@
 #include "Transform.h"
 
 StreamEngine::Transform::Transform(std::weak_ptr<GameObject> pOwningGameObject)
-	:BaseComponent(false, pOwningGameObject)
+	:BaseComponent(pOwningGameObject)
 {
 }
 

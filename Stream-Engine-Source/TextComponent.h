@@ -4,17 +4,17 @@
 
 namespace StreamEngine
 {
+	class RenderComponent;
 	class Texture2D;
 	class Font;
 
 	class TextComponent : public BaseComponent
 	{
 	public:
-		TextComponent(std::weak_ptr<GameObject> pOwningGameObject);
-		TextComponent(const std::string& fontPath, std::weak_ptr<GameObject> pOwningGameObject);
-		virtual ~TextComponent();
+		TextComponent(std::weak_ptr<GameObject> pOwningGameObject, std::shared_ptr<RenderComponent> renderComponent);
+		TextComponent(const std::string& fontPath, std::weak_ptr<GameObject> pOwningGameObject, std::shared_ptr<RenderComponent> renderComponent);
+		~TextComponent() override = default;
 
-		void Render() const override;
 		void Update(float deltaTime) override;
 
 		void SetText(const std::string& text);
@@ -30,14 +30,14 @@ namespace StreamEngine
 
 	private:
 		std::shared_ptr<Font> m_pFont;
-		std::shared_ptr<Texture2D> m_pTexture;
-		SDL_Color m_Color;
-		std::shared_ptr<std::string> m_pText;
-		int m_Size;
-		std::string m_FontPath;
+		std::shared_ptr<RenderComponent> m_pRenderComponent;
+		SDL_Color m_Color{};
+		std::shared_ptr<std::string> m_pText{};
+		int m_Size{};
+		std::string m_FontPath{};
 
-		bool m_UpdateText;
+		bool m_UpdateText{};
 		
-		void CreateTextTexture();
+		void CreateTextTexture() const;
 	};
 }

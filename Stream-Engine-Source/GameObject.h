@@ -21,35 +21,26 @@ namespace StreamEngine
 		template <typename T>
 		std::shared_ptr<T> GetComponent()
 		{
-			//for (std::shared_ptr<BaseComponent> bc: m_pComponents)
-			//{
-			//	BaseComponent* rawBc = bc.get();
-			//	if (typeid(*rawBc) == typeid(T))
-			//	{
-			//		//return dynamic_cast<T>(bc);
-			//		return std::dynamic_pointer_cast<T>(bc);
-			//	}
-			//}
-			if (m_pComponents.find(typeid(T)) != m_pComponents.end())
+			for (std::shared_ptr<BaseComponent> bc: m_pComponents)
 			{
-				return m_pComponents[typeid(T)];
+				BaseComponent* rawBc = bc.get();
+				if (typeid(*rawBc) == typeid(T))
+				{
+					//return dynamic_cast<T>(bc);
+					return std::dynamic_pointer_cast<T>(bc);
+				}
 			}
 			return nullptr;
 		}
 		template <typename T> void RemoveComponent()
 		{
-			//for (std::vector<std::shared_ptr<BaseComponent>>::iterator it = m_pComponents.begin(); it != m_pComponents.end(); ++it)
-			//{
-			//	BaseComponent* rawBc = it->get();
-			//	if (typeid(*rawBc) == typeid(T))
-			//	{
-			//		m_pComponents.erase(it);
-			//	}
-			//}
-			const auto it = m_pComponents.find(typeid(T));
-			if (it != m_pComponents.end())
+			for (std::vector<std::shared_ptr<BaseComponent>>::iterator it = m_pComponents.begin(); it != m_pComponents.end(); ++it)
 			{
-				m_pComponents.erase(it);
+				BaseComponent* rawBc = it->get();
+				if (typeid(*rawBc) == typeid(T))
+				{
+					m_pComponents.erase(it);
+				}
 			}
 		}
 
@@ -83,7 +74,7 @@ namespace StreamEngine
 		GameObject& operator=(GameObject&& other) = delete;
 
 	protected:
-		std::map<std::type_info ,std::shared_ptr<BaseComponent>> m_pComponents{};
+		std::vector<std::shared_ptr<BaseComponent>> m_pComponents{};
 		std::vector<std::shared_ptr<GameObject>> m_pChildObjects{};
 		bool m_IsVisual{};
 		Transform m_Transform{ weak_from_this() };

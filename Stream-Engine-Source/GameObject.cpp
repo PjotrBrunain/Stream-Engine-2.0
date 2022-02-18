@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "algorithm"
+#include "RenderComponent.h"
 
 StreamEngine::Transform& StreamEngine::GameObject::GetTransform()
 {
@@ -13,7 +14,10 @@ void StreamEngine::GameObject::Render()
 {
 	if (m_IsVisual)
 	{
-		std::for_each(m_pComponents.begin(), m_pComponents.end(), [](std::shared_ptr<BaseComponent> pComponent) {if (pComponent->IsVisual()) pComponent->Render(); });
+		std::for_each(m_pComponents.begin(), m_pComponents.end(), [](std::shared_ptr<BaseComponent> pComponent)
+		{
+			if (typeid(*(pComponent.get())) == typeid(RenderComponent)) pComponent->Render();
+		});
 	}
 }
 
@@ -92,5 +96,8 @@ void StreamEngine::GameObject::LateUpdate(float deltaTime)
 void StreamEngine::GameObject::AddComponent(const std::shared_ptr<BaseComponent> pComponent)
 {
 	m_pComponents.push_back(pComponent);
-	m_IsVisual = m_IsVisual || pComponent->IsVisual();
+	if (typeid(*(pComponent.get())) == typeid(RenderComponent))
+	{
+		m_IsVisual = true;
+	}
 }
