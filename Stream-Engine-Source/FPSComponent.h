@@ -3,11 +3,11 @@
 
 namespace StreamEngine
 {
-	class FPSComponent : public BaseComponent
+	class FPSComponent final : public BaseComponent
 	{
 	public:
 		FPSComponent(std::weak_ptr<GameObject> pOwningGameObject);
-		virtual ~FPSComponent() = default;
+		~FPSComponent() override = default;
 
 
 		void Update(float deltaTime) override;
@@ -19,8 +19,8 @@ namespace StreamEngine
 		FPSComponent& operator=(const FPSComponent&) = delete;
 		FPSComponent& operator=(FPSComponent&&) noexcept = delete;
 	private:
-		std::shared_ptr<std::string> m_pText;
-		float m_AccumulatedTime;
-		const float m_UpdateTimeSec;
+		std::shared_ptr<std::string> m_pText{};
+		float m_AccumulatedTime{};
+		const float m_UpdateTimeSec{};
 	};
 }

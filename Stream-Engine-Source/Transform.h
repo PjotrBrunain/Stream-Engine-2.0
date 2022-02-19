@@ -11,8 +11,8 @@ namespace StreamEngine
 	class Transform final : public BaseComponent
 	{
 	public:
-		Transform(std::weak_ptr<GameObject> pOwningGameObject);
-		virtual ~Transform();
+		explicit Transform(std::weak_ptr<GameObject> pOwningGameObject);
+		~Transform() override = default;
 
 		Transform(const Transform&) = delete;
 		Transform(Transform&&) noexcept = delete;
@@ -23,13 +23,13 @@ namespace StreamEngine
 		void SetPosition(float x, float y, float z);
 		void SetPosition(const glm::vec3& newPos);
 
-		void SetHeight(const float height);
-		void SetWidth(const float width);
+		void SetHeight(float height);
+		void SetWidth(float width);
 		float GetHeight() const { return m_Height; }
 		float GetWidth() const { return m_Width; }
 	private:
 		glm::vec3 m_Position;
-		float m_Height;
-		float m_Width;
+		float m_Height{};
+		float m_Width{};
 	};
 }

@@ -21,6 +21,6 @@ namespace StreamEngine
 		std::shared_ptr<Texture2D> GetTexture() const;
 
 	private:
-		std::shared_ptr<Texture2D> m_pTexture;
+		std::shared_ptr<Texture2D> m_pTexture{};
 	};
 }

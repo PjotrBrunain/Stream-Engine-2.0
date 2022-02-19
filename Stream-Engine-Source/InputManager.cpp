@@ -105,11 +105,6 @@ bool StreamEngine::InputManager::ProcessInput()
 						buttonLambda(flexiCommand);
 					}
 				}
-
-				//for (int i = 0; i < m_Commands.size(); ++i)
-				//{
-				//	buttonLambda(m_Commands[i], m_Commands[i].Button);
-				//}
 				m_LastButtons = m_CurrentState.Gamepad.wButtons;
 			}
 		}
@@ -120,30 +115,6 @@ bool StreamEngine::InputManager::ProcessInput()
 
 bool StreamEngine::InputManager::IsPressed(const DWORD& button) const
 {
-	//switch (button)
-	//{
-	//case ControllerButton::ButtonA:
-	//	return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_A;
-	//case ControllerButton::ButtonB:
-	//	return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_B;
-	//case ControllerButton::ButtonX:
-	//	return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_X;
-	//case ControllerButton::ButtonY:
-	//	return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_Y;
-	//case ControllerButton::ButtonStart:
-	//	return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_START;
-	//case ControllerButton::ButtonBack: 
-	//	return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_BACK;
-	//case ControllerButton::ButtonDpadUp: 
-	//	return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP;
-	//case ControllerButton::ButtonDpadDown: 
-	//	return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN;
-	//case ControllerButton::ButtonDpadLeft: 
-	//	return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT;
-	//case ControllerButton::ButtonDpadRight: 
-	//	return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT;
-	//default: return false;
-	//}
 	return m_CurrentState.Gamepad.wButtons & button;
 }
 

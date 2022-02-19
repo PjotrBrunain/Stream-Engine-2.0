@@ -6,10 +6,6 @@ StreamEngine::Transform::Transform(std::weak_ptr<GameObject> pOwningGameObject)
 {
 }
 
-StreamEngine::Transform::~Transform()
-{
-}
-
 void StreamEngine::Transform::SetPosition(const float x, const float y, const float z)
 {
 	m_Position.x = x;

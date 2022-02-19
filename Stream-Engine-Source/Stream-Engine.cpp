@@ -8,12 +8,7 @@
 #include "ResourceManager.h"
 #include <SDL.h>
 
-#include "FPSComponent.h"
 #include "TextureComponent.h"
-#include "GameObject.h"
-#include "Scene.h"
-#include "TextComponent.h"
-#include "TestCommand.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -67,7 +62,7 @@ void StreamEngine::Streamgin::Run(const std::function<void()>& loadFunction)
 	LoadGame(loadFunction);
 
 	{
-		auto& renderer = Renderer::GetInstance();
+		const auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
 

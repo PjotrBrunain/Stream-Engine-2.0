@@ -4,7 +4,7 @@
 
 #include "Renderer.h"
 
-StreamEngine::RenderComponent::RenderComponent(std::weak_ptr<GameObject> pOwningGameObject)
+StreamEngine::RenderComponent::RenderComponent(const std::weak_ptr<GameObject> pOwningGameObject)
 	:BaseComponent{pOwningGameObject }
 {
 }

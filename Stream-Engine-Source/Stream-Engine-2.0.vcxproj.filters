@@ -67,9 +67,6 @@
     <ClInclude Include="Command.h">
       <Filter>Base</Filter>
     </ClInclude>
-    <ClInclude Include="TestCommand.h">
-      <Filter>Base</Filter>
-    </ClInclude>
     <ClInclude Include="RenderComponent.h">
       <Filter>Components</Filter>
     </ClInclude>

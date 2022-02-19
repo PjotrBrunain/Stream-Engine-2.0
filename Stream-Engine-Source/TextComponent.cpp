@@ -35,9 +35,8 @@ StreamEngine::TextComponent::TextComponent(const std::string& fontPath, std::wea
 	CreateTextTexture();
 }
 
-void StreamEngine::TextComponent::Update(float deltaTime)
+void StreamEngine::TextComponent::Update(float)
 {
-	deltaTime = deltaTime;
 	if (m_UpdateText)
 	{
 		CreateTextTexture();
