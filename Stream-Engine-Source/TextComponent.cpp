@@ -15,10 +15,9 @@ StreamEngine::TextComponent::TextComponent(std::weak_ptr<GameObject> pOwningGame
 	m_pFont(nullptr),
 	m_pRenderComponent(renderComponent),
 	m_Color{ 255,255,255,255 },
-	m_pText{ std::make_shared<std::string>("SampleText") },
+	m_pText{},
 	m_Size{ 20 },
-	m_FontPath(),
-	m_UpdateText(false)
+	m_FontPath()
 {
 	
 }
@@ -35,23 +34,9 @@ StreamEngine::TextComponent::TextComponent(const std::string& fontPath, std::wea
 	CreateTextTexture();
 }
 
-void StreamEngine::TextComponent::Update(float)
-{
-	if (m_UpdateText)
-	{
-		CreateTextTexture();
-	}
-}
-
 void StreamEngine::TextComponent::SetText(const std::string& text)
 {
-	m_pText = std::make_shared<std::string>(text);
-	CreateTextTexture();
-}
-
-void StreamEngine::TextComponent::LinkText(const std::shared_ptr<std::string> pText)
-{
-	m_pText = pText;
+	m_pText = text;
 	CreateTextTexture();
 }
 
@@ -68,14 +53,13 @@ void StreamEngine::TextComponent::SetColor(const SDL_Color& color)
 	CreateTextTexture();
 }
 
-void StreamEngine::TextComponent::SetDoUpdate(bool updateText)
-{
-	m_UpdateText = updateText;
-}
-
 void StreamEngine::TextComponent::CreateTextTexture() const
 {
-	SDL_Surface* pSurface = TTF_RenderText_Blended(m_pFont->GetFont(), m_pText->c_str(), m_Color);
+	if (m_pText.empty())
+	{
+		return;
+	}
+	SDL_Surface* pSurface = TTF_RenderText_Blended(m_pFont->GetFont(), m_pText.c_str(), m_Color);
 	if (pSurface == nullptr)
 	{
 		throw std::runtime_error(std::string("Surface failed to initialize: ") + SDL_GetError());

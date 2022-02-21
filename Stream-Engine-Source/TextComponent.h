@@ -15,13 +15,9 @@ namespace StreamEngine
 		TextComponent(const std::string& fontPath, std::weak_ptr<GameObject> pOwningGameObject, std::shared_ptr<RenderComponent> renderComponent);
 		~TextComponent() override = default;
 
-		void Update(float deltaTime) override;
-
 		void SetText(const std::string& text);
-		void LinkText(std::shared_ptr<std::string> pText);
 		void SetSize(const int& size);
 		void SetColor(const SDL_Color& color);
-		void SetDoUpdate(bool updateText);
 
 		TextComponent(const TextComponent&) = delete;
 		TextComponent(TextComponent&&) noexcept = delete;
@@ -32,11 +28,9 @@ namespace StreamEngine
 		std::shared_ptr<Font> m_pFont{};
 		std::shared_ptr<RenderComponent> m_pRenderComponent{};
 		SDL_Color m_Color{};
-		std::shared_ptr<std::string> m_pText{};
+		std::string m_pText{};
 		int m_Size{};
 		std::string m_FontPath{};
-
-		bool m_UpdateText{};
 		
 		void CreateTextTexture() const;
 	};
