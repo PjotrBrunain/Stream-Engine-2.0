@@ -24,8 +24,8 @@ void StreamEngine::Streamgin::Initialize()
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		640,
-		480,
+		1920,
+		1040,
 		SDL_WINDOW_OPENGL
 	);
 	if (m_Window == nullptr)

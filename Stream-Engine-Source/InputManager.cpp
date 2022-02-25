@@ -3,6 +3,8 @@
 #include "Command.h"
 #include <SDL.h>
 
+#include "3rdParty/imgui-1.87/Backends/imgui_impl_sdl.h"
+
 
 bool StreamEngine::InputManager::ProcessInput()
 {
@@ -64,6 +66,7 @@ bool StreamEngine::InputManager::ProcessInput()
 				}
 			}
 		}
+		ImGui_ImplSDL2_ProcessEvent(&e);
 	}
 
 	for (int i = 0; i < m_AmountOfPlayers; ++i)
