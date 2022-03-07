@@ -14,7 +14,7 @@ void StreamEngine::RenderComponent::Render() const
 	if (m_pTexture)
 	{
 		BaseComponent::Render();
-		Renderer::GetInstance().RenderTexture(*m_pTexture.get(), m_pOwningGameObject.lock()->GetTransform().GetPosition().x, m_pOwningGameObject.lock()->GetTransform().GetPosition().y);
+		Renderer::GetInstance().RenderTexture(*m_pTexture.get(), GetOwner()->GetTransform().GetPosition().x, GetOwner()->GetTransform().GetPosition().y);
 	}
 }
 

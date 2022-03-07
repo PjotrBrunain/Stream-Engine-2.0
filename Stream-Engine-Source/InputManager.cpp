@@ -14,52 +14,52 @@ bool StreamEngine::InputManager::ProcessInput()
 		}
 		if (e.type == SDL_KEYDOWN) 
 		{
-			for (const FlexibleCommand flexiCommand : m_Commands)
+			for (const std::shared_ptr<Command> command : m_Commands)
 			{
-				if (!flexiCommand.OnRelease)
+				if (!command->IsOnRelease())
 				{
-					if (flexiCommand.KeyBoardButton == e.key.keysym.sym)
+					if (command->GetKeyboardButton() == e.key.keysym.sym)
 					{
-						flexiCommand.pCommand->Execute();
+						command->Execute();
 					}
 				}
 			}
 		}
 		if (e.type == SDL_MOUSEBUTTONDOWN)
 		{
-			for (const FlexibleCommand flexiCommand : m_Commands)
+			for (const std::shared_ptr<Command> command : m_Commands)
 			{
-				if (!flexiCommand.OnRelease)
+				if (!command->IsOnRelease())
 				{
-					if (flexiCommand.MouseButton == e.button.button)
+					if (command->GetMouseButton() == e.button.button)
 					{
-						flexiCommand.pCommand->Execute();
+						command->Execute();
 					}
 				}
 			}
 		}
 		if (e.type == SDL_KEYUP)
 		{
-			for (const FlexibleCommand flexiCommand : m_Commands)
+			for (const std::shared_ptr<Command> command : m_Commands)
 			{
-				if (flexiCommand.OnRelease)
+				if (command->IsOnRelease())
 				{
-					if (flexiCommand.KeyBoardButton == e.key.keysym.sym)
+					if (command->GetKeyboardButton() == e.key.keysym.sym)
 					{
-						flexiCommand.pCommand->Execute();
+						command->Execute();
 					}
 				}
 			}
 		}
 		if (e.type == SDL_MOUSEBUTTONUP)
 		{
-			for (const FlexibleCommand flexiCommand : m_Commands)
+			for (const std::shared_ptr<Command> command : m_Commands)
 			{
-				if (flexiCommand.OnRelease)
+				if (command->IsOnRelease())
 				{
-					if (flexiCommand.MouseButton == e.button.button)
+					if (command->GetMouseButton() == e.button.button)
 					{
-						flexiCommand.pCommand->Execute();
+						command->Execute();
 					}
 				}
 			}
@@ -74,33 +74,33 @@ bool StreamEngine::InputManager::ProcessInput()
 		{
 			if (m_CurrentState.Gamepad.wButtons != m_LastButtons)
 			{
-				auto buttonLambda = [this](const FlexibleCommand& button)
+				auto buttonLambda = [this](const std::shared_ptr<Command>& button)
 				{
-					if (button.OnRelease)
+					if (button->IsOnRelease())
 					{
-						if ((m_LastButtons & DWORD(button.ControllerButton)) == DWORD(button.ControllerButton) && !IsPressed(button.ControllerButton))
+						if ((m_LastButtons & DWORD(button->GetControllerButton())) == DWORD(button->GetControllerButton()) && !IsPressed(button->GetControllerButton()))
 						{
-							if (button.pCommand != nullptr)
+							if (button != nullptr)
 							{
-								button.pCommand->Execute();
+								button->Execute();
 							}
 						}
 					}
 					else
 					{
-						if (IsPressed(button.ControllerButton))
+						if (IsPressed(button->GetControllerButton()))
 						{
-							if (button.pCommand != nullptr)
+							if (button != nullptr)
 							{
-								button.pCommand->Execute();
+								button->Execute();
 							}
 						}
 					}
 				};
 
-				for (const FlexibleCommand& flexiCommand : m_Commands)
+				for (const std::shared_ptr<Command>& flexiCommand : m_Commands)
 				{
-					if (flexiCommand.ControllerId == i)
+					if (flexiCommand->GetControllerId() == i)
 					{
 						buttonLambda(flexiCommand);
 					}
@@ -118,7 +118,7 @@ bool StreamEngine::InputManager::IsPressed(const DWORD& button) const
 	return m_CurrentState.Gamepad.wButtons & button;
 }
 
-void StreamEngine::InputManager::SetCommand(const FlexibleCommand& command)
+void StreamEngine::InputManager::SetCommand(const std::shared_ptr<Command>& command)
 {
 	m_Commands.push_back(command);
 }
@@ -138,7 +138,7 @@ int StreamEngine::InputManager::GetAmountOfPlayers() const
 	return m_AmountOfPlayers;
 }
 
-void StreamEngine::InputManager::SetCommands(const std::vector<FlexibleCommand>& commands)
+void StreamEngine::InputManager::SetCommands(const std::vector<std::shared_ptr<Command>>& commands)
 {
 	m_Commands = commands;
 }

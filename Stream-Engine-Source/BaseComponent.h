@@ -7,8 +7,10 @@ namespace StreamEngine
 	
 	class BaseComponent
 	{
+	private:
+		std::weak_ptr<GameObject> m_pOwningGameObject;
+
 	public:
-		explicit BaseComponent(std::weak_ptr<GameObject> pOwningGameObject);
 		virtual ~BaseComponent() = default;
 
 #pragma warning (push)
@@ -24,6 +26,18 @@ namespace StreamEngine
 		BaseComponent& operator=(const BaseComponent&) = delete;
 		BaseComponent& operator=(BaseComponent&&) noexcept = delete;
 	protected:
-		std::weak_ptr<GameObject> m_pOwningGameObject;
+
+		GameObject* GetOwner() const
+		{
+			const auto sharedOwning = m_pOwningGameObject.lock();
+			if (sharedOwning)
+			{
+				return sharedOwning.get();
+			}
+			return nullptr;
+		}
+
+		explicit BaseComponent(std::weak_ptr<GameObject> pOwningGameObject);
+
 	};
 }

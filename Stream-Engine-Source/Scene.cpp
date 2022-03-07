@@ -61,12 +61,12 @@ std::shared_ptr<GameObject> Scene::GetObjectByName(std::string name) const
 	return nullptr;
 }
 
-const std::vector<FlexibleCommand>& Scene::GetCommands() const
+const std::vector<std::shared_ptr<Command>>& Scene::GetCommands() const
 {
 	return m_SceneCommands;
 }
 
-void Scene::AddCommand(const FlexibleCommand& command)
+void Scene::AddCommand(const std::shared_ptr<Command>& command)
 {
 	m_SceneCommands.push_back(command);
 }

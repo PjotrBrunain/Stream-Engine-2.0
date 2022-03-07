@@ -20,9 +20,9 @@ namespace StreamEngine
 		void Render() const;
 
 		std::shared_ptr<GameObject> GetObjectByName(std::string name) const;
-		const std::vector<FlexibleCommand>& GetCommands() const;
+		const std::vector<std::shared_ptr<Command>>& GetCommands() const;
 
-		void AddCommand(const FlexibleCommand& command);
+		void AddCommand(const std::shared_ptr<Command>& command);
 
 		~Scene() = default;
 		Scene(const Scene& other) = delete;
@@ -34,7 +34,7 @@ namespace StreamEngine
 
 		std::string m_Name;
 		std::vector < std::shared_ptr<GameObject>> m_Objects{};
-		std::vector<FlexibleCommand> m_SceneCommands{};
+		std::vector<std::shared_ptr<Command>> m_SceneCommands{};
 
 		static unsigned int m_IdCounter; 
 	};

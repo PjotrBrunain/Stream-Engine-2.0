@@ -6,31 +6,21 @@
 namespace StreamEngine
 {
 	class Command;
-
-	struct FlexibleCommand
-	{
-		std::shared_ptr<Command> pCommand{};
-		bool OnRelease{};
-		DWORD ControllerButton{};
-		int ControllerId{};
-		Sint32 KeyBoardButton{};
-		UINT8 MouseButton{};
-	};
 	
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
 		bool ProcessInput();
 		bool IsPressed(const DWORD& button) const;
-		void SetCommand(const FlexibleCommand& command);
+		void SetCommand(const std::shared_ptr<Command>& command);
 		void SetAmountOfPlayers(int amountOfPlayers);
 		void ClearCommands();
 		int GetAmountOfPlayers() const;
 
-		void SetCommands(const std::vector<FlexibleCommand>& commands);
+		void SetCommands(const std::vector<std::shared_ptr<Command>>& commands);
 	private:
 		XINPUT_STATE m_CurrentState{};
-		std::vector<FlexibleCommand> m_Commands{};
+		std::vector<std::shared_ptr<Command>> m_Commands{};
 		WORD m_LastButtons{};
 		int m_AmountOfPlayers{ 1 };
 	};
