@@ -22,6 +22,8 @@ namespace StreamEngine
 		void RenderTexture(const Texture2D& spriteTexture, float dstX, float dstY, float srcX, float srcY, float srcWidth, float srcHeight) const;
 		void RenderTexture(const Texture2D& spriteTexture, float dstX, float dstY, float dstWidth, float dstHeight, float srcX, float srcY, float srcWidth, float srcHeight) const;
 
+		int GetOpenGLDriverIndex();
+
 		SDL_Renderer* GetSDLRenderer() const { return m_Renderer; }
 	private:
 		SDL_Renderer* m_Renderer{};

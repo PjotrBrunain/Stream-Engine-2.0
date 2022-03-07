@@ -9,7 +9,7 @@
 
 void StreamEngine::Renderer::Init(SDL_Window * window)
 {
-	m_Renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	m_Renderer = SDL_CreateRenderer(window, GetOpenGLDriverIndex(), SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (m_Renderer == nullptr) 
 	{
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
@@ -101,4 +101,22 @@ void StreamEngine::Renderer::RenderTexture(const Texture2D& spriteTexture, float
 	src.h = static_cast<int>(srcHeight);
 	src.w = static_cast<int>(srcWidth);
 	SDL_RenderCopy(GetSDLRenderer(), spriteTexture.GetSDLTexture(), &src, &dst);
+}
+
+int StreamEngine::Renderer::GetOpenGLDriverIndex()
+{
+	int oglIdx = -1;
+	int nRD = SDL_GetNumRenderDrivers();
+	for (int i = 0; i < nRD; i++)
+	{
+		SDL_RendererInfo info;
+		if (!SDL_GetRenderDriverInfo(i,&info))
+		{
+			if (!strcmp(info.name, "opengl"))
+			{
+				oglIdx = i;
+			}
+		}
+	}
+	return oglIdx;
 }
