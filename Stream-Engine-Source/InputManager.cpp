@@ -5,18 +5,20 @@
 
 #include "Backends/imgui_impl_sdl.h"
 
-
 bool StreamEngine::InputManager::ProcessInput()
 {
+	// todo: read the input
+	m_Controller.ProcessInput();
+
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
-		if (e.type == SDL_QUIT) 
+		if (e.type == SDL_QUIT)
 		{
 			return false;
 		}
-		if (e.type == SDL_KEYDOWN) 
+		if (e.type == SDL_KEYDOWN)
 		{
-			for (const std::shared_ptr<Command> command : m_Commands)
+			for (const std::shared_ptr<Command> command : m_pCommands)
 			{
 				if (!command->IsOnRelease())
 				{
@@ -29,7 +31,7 @@ bool StreamEngine::InputManager::ProcessInput()
 		}
 		if (e.type == SDL_MOUSEBUTTONDOWN)
 		{
-			for (const std::shared_ptr<Command> command : m_Commands)
+			for (const std::shared_ptr<Command> command : m_pCommands)
 			{
 				if (!command->IsOnRelease())
 				{
@@ -42,7 +44,7 @@ bool StreamEngine::InputManager::ProcessInput()
 		}
 		if (e.type == SDL_KEYUP)
 		{
-			for (const std::shared_ptr<Command> command : m_Commands)
+			for (const std::shared_ptr<Command> command : m_pCommands)
 			{
 				if (command->IsOnRelease())
 				{
@@ -55,7 +57,7 @@ bool StreamEngine::InputManager::ProcessInput()
 		}
 		if (e.type == SDL_MOUSEBUTTONUP)
 		{
-			for (const std::shared_ptr<Command> command : m_Commands)
+			for (const std::shared_ptr<Command> command : m_pCommands)
 			{
 				if (command->IsOnRelease())
 				{
@@ -69,80 +71,48 @@ bool StreamEngine::InputManager::ProcessInput()
 		ImGui_ImplSDL2_ProcessEvent(&e);
 	}
 
-	for (int i = 0; i < m_AmountOfPlayers; ++i)
+	auto buttonLambda = [this](const std::shared_ptr<Command> command)
 	{
-		ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
-		const DWORD dwResult = XInputGetState(0, &m_CurrentState);
-		if (dwResult == ERROR_SUCCESS)
+		if (command->IsOnRelease())
 		{
-			if (m_CurrentState.Gamepad.wButtons != m_LastButtons)
+			if (m_Controller.IsUp(command->GetControllerButton()))
 			{
-				auto buttonLambda = [this](const std::shared_ptr<Command>& button)
+				if (command != nullptr)
 				{
-					if (button->IsOnRelease())
-					{
-						if ((m_LastButtons & DWORD(button->GetControllerButton())) == DWORD(button->GetControllerButton()) && !IsPressed(button->GetControllerButton()))
-						{
-							if (button != nullptr)
-							{
-								button->Execute();
-							}
-						}
-					}
-					else
-					{
-						if (IsPressed(button->GetControllerButton()))
-						{
-							if (button != nullptr)
-							{
-								button->Execute();
-							}
-						}
-					}
-				};
-
-				for (const std::shared_ptr<Command>& flexiCommand : m_Commands)
-				{
-					if (flexiCommand->GetControllerId() == i)
-					{
-						buttonLambda(flexiCommand);
-					}
+					command->Execute();
 				}
-				m_LastButtons = m_CurrentState.Gamepad.wButtons;
 			}
 		}
-	}
+		else
+		{
+			if (m_Controller.IsDown(command->GetControllerButton()))
+			{
+				if (command != nullptr)
+				{
+					command->Execute();
+				}
+			}
+		}
+	};
 
+	for (const auto command : m_pCommands)
+	{
+		buttonLambda(command);
+	}
 	return true;
 }
 
-bool StreamEngine::InputManager::IsPressed(const DWORD& button) const
+bool StreamEngine::InputManager::IsPressed(XinputController::ControllerButton button) const
 {
-	return m_CurrentState.Gamepad.wButtons & button;
+	return m_Controller.IsPressed(button);
 }
 
-void StreamEngine::InputManager::SetCommand(const std::shared_ptr<Command>& command)
+void StreamEngine::InputManager::AddCommand(std::shared_ptr<Command> pCommand)
 {
-	m_Commands.push_back(command);
-}
-
-void StreamEngine::InputManager::SetAmountOfPlayers(int amountOfPlayers)
-{
-	m_AmountOfPlayers = amountOfPlayers;
-}
-
-void StreamEngine::InputManager::ClearCommands()
-{
-	m_Commands.clear();
-}
-
-int StreamEngine::InputManager::GetAmountOfPlayers() const
-{
-	return m_AmountOfPlayers;
+	m_pCommands.push_back(pCommand);
 }
 
 void StreamEngine::InputManager::SetCommands(const std::vector<std::shared_ptr<Command>>& commands)
 {
-	m_Commands = commands;
+	m_pCommands = commands;
 }
-

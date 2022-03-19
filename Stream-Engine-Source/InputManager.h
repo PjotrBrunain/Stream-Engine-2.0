@@ -1,28 +1,27 @@
 #pragma once
-#include <SDL_stdinc.h>
-#include <XInput.h>
+#include <vector>
+
 #include "Singleton.h"
+#include "XinputController.h"
+
+class Command;
 
 namespace StreamEngine
 {
-	class Command;
-	
-	class InputManager final : public Singleton<InputManager>
+	enum class ControllerButton;
+
+	class InputManager : public Singleton<InputManager>
 	{
 	public:
+		~InputManager() = default;
 		bool ProcessInput();
-		bool IsPressed(const DWORD& button) const;
-		void SetCommand(const std::shared_ptr<Command>& command);
-		void SetAmountOfPlayers(int amountOfPlayers);
-		void ClearCommands();
-		int GetAmountOfPlayers() const;
+		bool IsPressed(XinputController::ControllerButton button) const;
 
+		void AddCommand(std::shared_ptr<Command> pCommand);
 		void SetCommands(const std::vector<std::shared_ptr<Command>>& commands);
 	private:
-		XINPUT_STATE m_CurrentState{};
-		std::vector<std::shared_ptr<Command>> m_Commands{};
-		WORD m_LastButtons{};
-		int m_AmountOfPlayers{ 1 };
-	};
+		XinputController m_Controller{};
 
+		std::vector<std::shared_ptr<Command>> m_pCommands{};
+	};
 }
