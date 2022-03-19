@@ -3,7 +3,7 @@
 #include "Command.h"
 #include <SDL.h>
 
-#include "3rdParty/imgui-1.87/Backends/imgui_impl_sdl.h"
+#include "Backends/imgui_impl_sdl.h"
 
 
 bool StreamEngine::InputManager::ProcessInput()

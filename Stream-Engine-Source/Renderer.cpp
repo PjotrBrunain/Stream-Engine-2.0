@@ -3,9 +3,9 @@
 #include <SDL.h>
 #include "SceneManager.h"
 #include "Texture2D.h"
-#include "3rdParty/imgui-1.87/imgui.h"
-#include "3rdParty/imgui-1.87/Backends/imgui_impl_opengl2.h"
-#include "3rdParty/imgui-1.87/Backends/imgui_impl_sdl.h"
+#include "imgui.h"
+#include "Backends/imgui_impl_opengl2.h"
+#include "Backends/imgui_impl_sdl.h"
 
 void StreamEngine::Renderer::Init(SDL_Window * window)
 {

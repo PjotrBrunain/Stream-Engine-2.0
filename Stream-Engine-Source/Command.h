@@ -7,14 +7,14 @@ namespace StreamEngine
 	{
 	public:
 		virtual ~Command() = default;
-
+	
 		Command(const Command&) = delete;
 		Command(Command&&) noexcept = delete;
 		Command& operator=(const Command&) = delete;
 		Command& operator=(Command&&) noexcept = delete;
-
+	
 		virtual void Execute() = 0;
-
+	
 		bool IsOnRelease() const { return m_OnRelease; }
 		DWORD GetControllerButton() const { return m_ControllerButton; }
 		int GetControllerId() const { return m_ControllerId; }
@@ -26,7 +26,7 @@ namespace StreamEngine
 		int m_ControllerId{};
 		Sint32 m_KeyBoardButton{};
 		UINT8 m_MouseButton{};
-
+	
 	protected:
 		explicit Command(bool onRelease, DWORD controllerButton, int controllerId, Sint32 keyboardButton, UINT8 mouseButton)
 			: m_OnRelease(onRelease),
